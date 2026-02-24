@@ -1,9 +1,25 @@
+const fs = require("fs");
 const http = require("http");
+const path = require("path");
 
-const PORT = Number(process.env.PORT || 3000);
+const PORT = Number(process.env.PORT || 8080);
 const RESEND_API_KEY = process.env.RESEND_API_KEY || "";
 const RESEND_FROM_EMAIL = process.env.RESEND_FROM_EMAIL || "onboarding@resend.dev";
 const CONTACT_TO_EMAIL = process.env.CONTACT_TO_EMAIL || "contact@saurabhadvani.online";
+const APP_ROOT = path.resolve(__dirname, "..");
+
+const MIME_TYPES = {
+  ".css": "text/css; charset=utf-8",
+  ".html": "text/html; charset=utf-8",
+  ".jpeg": "image/jpeg",
+  ".jpg": "image/jpeg",
+  ".js": "text/javascript; charset=utf-8",
+  ".json": "application/json; charset=utf-8",
+  ".mp4": "video/mp4",
+  ".pdf": "application/pdf",
+  ".png": "image/png",
+  ".svg": "image/svg+xml"
+};
 
 function sendJson(res, statusCode, payload) {
   const body = JSON.stringify(payload);
@@ -12,6 +28,14 @@ function sendJson(res, statusCode, payload) {
     "Cache-Control": "no-store"
   });
   res.end(body);
+}
+
+function sendText(res, statusCode, message) {
+  res.writeHead(statusCode, {
+    "Content-Type": "text/plain; charset=utf-8",
+    "Cache-Control": "no-store"
+  });
+  res.end(message);
 }
 
 function escapeHtml(value) {
@@ -88,12 +112,89 @@ async function sendViaResend(fields) {
   return data;
 }
 
+function getPathname(rawUrl) {
+  try {
+    return new URL(rawUrl, "http://localhost").pathname;
+  } catch (error) {
+    return null;
+  }
+}
+
+async function fileExists(filePath) {
+  try {
+    const stats = await fs.promises.stat(filePath);
+    return stats.isFile();
+  } catch (error) {
+    return false;
+  }
+}
+
+function isWithinRoot(filePath) {
+  const normalizedRoot = APP_ROOT.endsWith(path.sep) ? APP_ROOT : `${APP_ROOT}${path.sep}`;
+  return filePath === APP_ROOT || filePath.startsWith(normalizedRoot);
+}
+
+async function resolveStaticFile(pathname) {
+  const decodedPath = decodeURIComponent(pathname);
+  const requestPath = path.normalize(decodedPath).replace(/^\/+/, "");
+  const fullPath = path.resolve(APP_ROOT, requestPath);
+  if (!isWithinRoot(fullPath)) {
+    return null;
+  }
+
+  const extension = path.extname(fullPath);
+  const candidates = extension
+    ? [fullPath]
+    : [fullPath, `${fullPath}.html`, path.join(fullPath, "index.html"), path.join(APP_ROOT, "index.html")];
+
+  for (const candidate of candidates) {
+    if (!isWithinRoot(candidate)) {
+      continue;
+    }
+    if (await fileExists(candidate)) {
+      return candidate;
+    }
+  }
+
+  return null;
+}
+
+async function sendFile(req, res, filePath) {
+  const ext = path.extname(filePath).toLowerCase();
+  const stats = await fs.promises.stat(filePath);
+  res.writeHead(200, {
+    "Content-Type": MIME_TYPES[ext] || "application/octet-stream",
+    "Cache-Control": ext === ".html" ? "no-store" : "public, max-age=86400",
+    "Content-Length": String(stats.size)
+  });
+
+  if (req.method === "HEAD") {
+    res.end();
+    return;
+  }
+
+  const stream = fs.createReadStream(filePath);
+  stream.on("error", () => {
+    if (!res.headersSent) {
+      sendText(res, 500, "Internal Server Error");
+    } else {
+      res.destroy();
+    }
+  });
+  stream.pipe(res);
+}
+
 const server = http.createServer(async (req, res) => {
-  if (req.url === "/healthz" && req.method === "GET") {
+  const pathname = getPathname(req.url || "/");
+  if (!pathname) {
+    return sendJson(res, 400, { ok: false, message: "Invalid URL." });
+  }
+
+  if (pathname === "/healthz" && req.method === "GET") {
     return sendJson(res, 200, { ok: true });
   }
 
-  if (req.url === "/api/contact" && req.method === "POST") {
+  if (pathname === "/api/contact" && req.method === "POST") {
     try {
       const body = await readJsonBody(req);
       const name = String(body.name || "").trim();
@@ -128,9 +229,25 @@ const server = http.createServer(async (req, res) => {
     }
   }
 
-  return sendJson(res, 404, { ok: false, message: "Not found." });
+  if (pathname.startsWith("/api/")) {
+    return sendJson(res, 404, { ok: false, message: "Not found." });
+  }
+
+  if (req.method !== "GET" && req.method !== "HEAD") {
+    return sendText(res, 405, "Method Not Allowed");
+  }
+
+  try {
+    const filePath = await resolveStaticFile(pathname);
+    if (!filePath) {
+      return sendText(res, 404, "Not Found");
+    }
+    return sendFile(req, res, filePath);
+  } catch (error) {
+    return sendText(res, 500, "Internal Server Error");
+  }
 });
 
 server.listen(PORT, () => {
-  process.stdout.write(`API listening on port ${PORT}\n`);
+  process.stdout.write(`Server listening on port ${PORT}\n`);
 });
