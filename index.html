@@ -1,0 +1,1544 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Saurabh Advani - DevSecOps Engineer portfolio.">
+  <title>Saurabh Advani | DevSecOps Engineer</title>
+  <script>
+    window.tailwind = window.tailwind || {};
+    window.tailwind.config = {
+      corePlugins: {
+        preflight: false
+      }
+    };
+  </script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    :root {
+      --bg: #000000;
+      --bg-elev: #050608;
+      --surface: #0a0d12;
+      --surface-soft: #10151f;
+      --line: #273a5d;
+      --line-soft: #1d2f4d;
+      --text: #e7efff;
+      --muted: #9bb0d0;
+      --accent: #39d2be;
+      --accent-2: #6f8fff;
+      --ok: #36cf83;
+      --warn: #ffb16a;
+      --radius-lg: 20px;
+      --radius-md: 14px;
+      --radius-sm: 10px;
+      --max: 1160px;
+      --header-h: 74px;
+      --shadow: 0 16px 40px rgba(0, 0, 0, 0.38);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: "Avenir Next", "Segoe UI", "Trebuchet MS", sans-serif;
+      color: var(--text);
+      background: #000000;
+      line-height: 1.56;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    h1,
+    h2,
+    h3 {
+      font-family: "Sora", "Palatino Linotype", Palatino, serif;
+      line-height: 1.15;
+      letter-spacing: 0.2px;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .container {
+      width: min(100% - 2rem, var(--max));
+      margin-inline: auto;
+    }
+
+    .skip-link {
+      position: absolute;
+      left: -999px;
+      top: 0;
+      z-index: 100;
+      padding: 0.55rem 0.8rem;
+      background: var(--accent);
+      color: #042520;
+      font-weight: 700;
+      border-radius: 0 0 var(--radius-sm) var(--radius-sm);
+    }
+
+    .skip-link:focus {
+      left: 0.75rem;
+    }
+
+    .fx-bg {
+      position: fixed;
+      inset: 0;
+      overflow: hidden;
+      pointer-events: none;
+      z-index: 0;
+      background:
+        radial-gradient(120% 90% at 14% 12%, rgba(57, 210, 190, 0.098), rgba(57, 210, 190, 0) 42%),
+        radial-gradient(95% 85% at 86% 26%, rgba(111, 143, 255, 0.126), rgba(111, 143, 255, 0) 48%),
+        radial-gradient(100% 90% at 50% 88%, rgba(79, 122, 255, 0.084), rgba(79, 122, 255, 0) 52%),
+        linear-gradient(180deg, #020407 0%, #000000 100%);
+    }
+
+    .fx-canvas {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      display: block;
+      z-index: 0;
+    }
+
+    .fx-grid {
+      position: absolute;
+      inset: -30%;
+      background-image:
+        linear-gradient(rgba(57, 210, 190, 0.12) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(57, 210, 190, 0.12) 1px, transparent 1px);
+      background-size: 76px 76px;
+      opacity: 0.07;
+      z-index: 1;
+      transform: perspective(1100px) rotateX(66deg) scale(1.75);
+      transform-origin: 50% 0;
+      animation: grid-slide 24s linear infinite;
+    }
+
+    .fx-noise {
+      position: absolute;
+      inset: -40%;
+      background:
+        repeating-radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.07) 0 1px, rgba(255, 255, 255, 0) 1px 3px),
+        repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.02) 0 2px, rgba(255, 255, 255, 0) 2px 5px);
+      background-size: 140px 140px, 220px 220px;
+      opacity: 0.028;
+      z-index: 2;
+      mix-blend-mode: soft-light;
+      animation: noise-float 12s steps(10) infinite;
+    }
+
+    .fx-vignette {
+      position: absolute;
+      inset: 0;
+      z-index: 3;
+      background: radial-gradient(ellipse at center, rgba(5, 9, 18, 0) 42%, rgba(5, 9, 18, 0.62) 100%);
+    }
+
+    header,
+    main,
+    footer {
+      position: relative;
+      z-index: 2;
+    }
+
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 40;
+      min-height: var(--header-h);
+      background: rgba(0, 0, 0, 0.66);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border-bottom: 1px solid rgba(57, 210, 190, 0.14);
+    }
+
+    .topbar {
+      min-height: var(--header-h);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+    }
+
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.62rem;
+      font-weight: 700;
+      letter-spacing: 0.45px;
+    }
+
+    .brand-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      box-shadow: 0 0 0 5px rgba(57, 210, 190, 0.16);
+    }
+
+    nav ul {
+      list-style: none;
+      display: flex;
+      align-items: center;
+      gap: 0.25rem;
+      flex-wrap: wrap;
+    }
+
+    nav a {
+      color: var(--muted);
+      font-weight: 700;
+      font-size: 0.92rem;
+      padding: 0.45rem 0.68rem;
+      border-radius: var(--radius-sm);
+      transition: 0.2s ease;
+    }
+
+    nav a:hover,
+    nav a.active {
+      color: var(--text);
+      background: rgba(57, 210, 190, 0.1);
+    }
+
+    .menu-btn {
+      display: none;
+      border: 1px solid var(--line);
+      background: var(--surface);
+      color: var(--text);
+      border-radius: var(--radius-sm);
+      padding: 0.4rem 0.62rem;
+      font-weight: 700;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.42rem;
+      border: 1px solid transparent;
+      border-radius: var(--radius-sm);
+      font-weight: 700;
+      padding: 0.68rem 0.96rem;
+      transition: 0.2s ease;
+    }
+
+    .btn:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 8px 22px rgba(0, 0, 0, 0.35);
+    }
+
+    .btn-main {
+      background: linear-gradient(135deg, var(--accent), #76f0e1);
+      color: #042520;
+    }
+
+    .btn-ghost {
+      border-color: var(--line);
+      background: rgba(255, 255, 255, 0.02);
+      color: var(--text);
+    }
+
+    .btn-ghost:hover {
+      border-color: #36507d;
+      background: rgba(255, 255, 255, 0.04);
+    }
+
+    .btn[aria-disabled="true"] {
+      pointer-events: none;
+      opacity: 0.55;
+      filter: grayscale(0.2);
+    }
+
+    main {
+      padding-bottom: 3rem;
+    }
+
+    section {
+      scroll-margin-top: calc(var(--header-h) + 14px);
+    }
+
+    .hero {
+      padding: 3rem 0 1.3rem;
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1.2fr 0.8fr;
+      gap: 1rem;
+      align-items: stretch;
+    }
+
+    .card {
+      border: 1px solid var(--line-soft);
+      border-radius: var(--radius-lg);
+      background: linear-gradient(180deg, rgba(10, 12, 18, 0.8), rgba(4, 6, 10, 0.86));
+      backdrop-filter: blur(4px);
+      -webkit-backdrop-filter: blur(4px);
+      box-shadow: var(--shadow);
+    }
+
+    .hero-main {
+      padding: 1.8rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-main::after {
+      content: "";
+      position: absolute;
+      width: 260px;
+      height: 260px;
+      right: -90px;
+      bottom: -95px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(57, 210, 190, 0.2), rgba(57, 210, 190, 0) 70%);
+    }
+
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: var(--accent);
+      border: 1px solid rgba(57, 210, 190, 0.24);
+      background: rgba(57, 210, 190, 0.08);
+      border-radius: 999px;
+      padding: 0.26rem 0.6rem;
+      margin-bottom: 0.95rem;
+    }
+
+    .hero h1 {
+      font-size: clamp(2.1rem, 4vw, 3.3rem);
+      max-width: 15ch;
+      margin-bottom: 0.7rem;
+    }
+
+    .hero p {
+      color: var(--muted);
+      max-width: 56ch;
+      margin-bottom: 1.1rem;
+    }
+
+    .hero-cta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.6rem;
+      margin-bottom: 1rem;
+    }
+
+    .chip-wrap {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.45rem;
+    }
+
+    .chip {
+      font-size: 0.77rem;
+      font-weight: 700;
+      border-radius: 999px;
+      padding: 0.24rem 0.52rem;
+      border: 1px solid #2d446d;
+      color: #c8d8f3;
+      background: rgba(255, 255, 255, 0.01);
+    }
+
+    .hero-side {
+      display: grid;
+      gap: 0.9rem;
+    }
+
+    .panel {
+      padding: 1.05rem;
+    }
+
+    .photo-ring {
+      width: min(260px, 70vw);
+      height: min(260px, 70vw);
+      aspect-ratio: 1 / 1;
+      margin: 0 auto 0.7rem;
+      padding: 5px;
+      box-sizing: border-box;
+      position: relative;
+      border-radius: 50%;
+      background: linear-gradient(140deg, #39d2be, #6f8fff);
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .photo-ring img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+      border-radius: 50%;
+      display: none;
+    }
+
+    .photo-placeholder {
+      color: #dbe7ff;
+      font-weight: 700;
+    }
+
+    .photo-sub {
+      text-align: center;
+      color: var(--muted);
+      font-size: 0.84rem;
+    }
+
+    .video-box {
+      border: 1px solid #2a4068;
+      border-radius: var(--radius-md);
+      background: rgba(255, 255, 255, 0.02);
+      padding: 1rem 1rem 0.92rem;
+      text-align: center;
+      display: grid;
+      justify-items: center;
+    }
+
+    .tunnel-stage {
+      width: min(100%, 360px);
+      aspect-ratio: 16 / 9;
+      height: auto;
+      border-radius: 12px;
+      overflow: hidden;
+      border: 1px solid rgba(58, 95, 145, 0.56);
+      position: relative;
+      margin-inline: auto;
+      background:
+        radial-gradient(150% 120% at 12% 50%, rgba(57, 210, 190, 0.078), rgba(57, 210, 190, 0) 52%),
+        radial-gradient(140% 120% at 92% 50%, rgba(111, 143, 255, 0.14), rgba(111, 143, 255, 0) 56%),
+        linear-gradient(180deg, rgba(6, 10, 18, 0.9), rgba(3, 7, 14, 0.94));
+    }
+
+    .tunnel-stage canvas {
+      display: block;
+      width: 100%;
+      height: 100%;
+    }
+
+    .video-box .photo-sub {
+      margin-top: 0.72rem;
+    }
+
+    .mx-auto {
+      display: block;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .mb-4 {
+      margin-bottom: 1rem;
+    }
+
+    .metrics {
+      padding: 1rem 0 0.8rem;
+    }
+
+    .metric-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 0.72rem;
+    }
+
+    .metric {
+      text-align: center;
+      padding: 0.84rem;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--line-soft);
+      background: linear-gradient(160deg, rgba(9, 12, 18, 0.76), rgba(2, 4, 8, 0.84));
+      backdrop-filter: blur(4px);
+      -webkit-backdrop-filter: blur(4px);
+    }
+
+    .metric strong {
+      display: block;
+      color: var(--accent);
+      font-size: 1.3rem;
+      margin-bottom: 0.1rem;
+    }
+
+    .metric span {
+      color: var(--muted);
+      font-size: 0.84rem;
+    }
+
+    .section-head {
+      margin-bottom: 0.85rem;
+    }
+
+    .section-head h2 {
+      font-size: clamp(1.55rem, 2.8vw, 2.28rem);
+      margin-bottom: 0.24rem;
+    }
+
+    .section-head p {
+      color: var(--muted);
+      max-width: 64ch;
+    }
+
+    .focus,
+    .work,
+    .resume,
+    .contact {
+      padding-top: 3.4rem;
+      padding-bottom: 1.6rem;
+    }
+
+    .focus-grid,
+    .work-grid,
+    .contact-grid {
+      display: grid;
+      gap: 0.8rem;
+    }
+
+    .focus-grid,
+    .work-grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .focus-card,
+    .work-card,
+    .stack-card,
+    .resume-card,
+    .contact-card {
+      padding: 1rem;
+    }
+
+    .focus-card h3,
+    .work-card h3,
+    .contact-card h3,
+    .resume-card h3 {
+      font-size: 1.03rem;
+      margin-bottom: 0.42rem;
+    }
+
+    .focus-card p,
+    .work-card p,
+    .contact-card p,
+    .resume-card p {
+      color: var(--muted);
+      font-size: 0.93rem;
+    }
+
+    .kpi {
+      display: inline-flex;
+      align-items: center;
+      border-radius: 999px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      padding: 0.2rem 0.5rem;
+      margin-bottom: 0.45rem;
+      border: 1px solid;
+    }
+
+    .kpi.ok {
+      color: #99f0c5;
+      border-color: #2c6949;
+      background: rgba(54, 207, 131, 0.1);
+    }
+
+    .kpi.warn {
+      color: #ffc38f;
+      border-color: #84502c;
+      background: rgba(255, 177, 106, 0.12);
+    }
+
+    .kpi.cool {
+      color: #a8c3ff;
+      border-color: #355286;
+      background: rgba(111, 143, 255, 0.12);
+    }
+
+    .stack {
+      padding: 6rem 0 6.6rem;
+      background: linear-gradient(180deg, rgba(4, 7, 13, 0.56) 0%, rgba(2, 5, 10, 0.62) 100%);
+      border-top: 1px solid rgba(57, 210, 190, 0.12);
+      box-shadow: inset 0 12px 28px -22px rgba(0, 0, 0, 0.6);
+    }
+
+    .stack-marquee {
+      overflow: hidden;
+      background: linear-gradient(180deg, rgba(8, 12, 20, 0.62), rgba(3, 6, 12, 0.72)) !important;
+      border: 1px solid rgba(54, 82, 126, 0.45) !important;
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+    }
+
+    .stack-marquee-track {
+      display: flex;
+      width: max-content;
+      animation: stack-marquee 20s linear infinite;
+      animation-play-state: running;
+      will-change: transform;
+    }
+
+    .stack-slide {
+      flex: 0 0 auto;
+      flex-shrink: 0;
+      padding: 0 0.35rem;
+    }
+
+    .stack-tech-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 146px);
+      gap: 1rem;
+      justify-content: center;
+    }
+
+    .stack-tech-card {
+      width: 100%;
+      min-width: 100%;
+      height: 136px;
+      background: linear-gradient(180deg, rgba(12, 18, 30, 0.58), rgba(6, 10, 18, 0.68)) !important;
+      border-color: rgba(62, 96, 148, 0.44) !important;
+      backdrop-filter: blur(6px);
+      -webkit-backdrop-filter: blur(6px);
+    }
+
+    .stack-logo-wrap {
+      background: rgba(16, 24, 38, 0.52) !important;
+      border-color: rgba(76, 110, 162, 0.48) !important;
+      backdrop-filter: blur(6px);
+      -webkit-backdrop-filter: blur(6px);
+    }
+
+    @media (min-width: 768px) {
+      .stack-tech-grid {
+        grid-template-columns: repeat(3, 170px);
+      }
+    }
+
+    @media (min-width: 1024px) {
+      .stack-tech-grid {
+        grid-template-columns: repeat(6, 170px);
+      }
+    }
+
+    @keyframes stack-marquee {
+      from {
+        transform: translateX(0);
+      }
+      to {
+        transform: translateX(-50%);
+      }
+    }
+
+    .resume-layout {
+      display: grid;
+      grid-template-columns: 0.62fr 1.38fr;
+      gap: 0.85rem;
+    }
+
+    .resume-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.55rem;
+      margin-top: 0.7rem;
+    }
+
+    .resume-status {
+      margin-top: 0.5rem;
+      font-size: 0.84rem;
+      color: var(--muted);
+    }
+
+    .resume-frame-wrap {
+      border: 1px solid #2a416a;
+      border-radius: var(--radius-md);
+      background: rgba(0, 0, 0, 0.62);
+      overflow: hidden;
+      min-height: 540px;
+      height: 100%;
+    }
+
+    .resume-frame {
+      width: 100%;
+      height: 100%;
+      min-height: 540px;
+      border: 0;
+      display: block;
+      background: #0a1424;
+    }
+
+    .resume-preview-card {
+      padding: 0.65rem;
+      overflow: hidden;
+      display: flex;
+      min-height: 540px;
+    }
+
+    .resume-preview-card .resume-frame-wrap {
+      width: 100%;
+      border: 1px solid #2a416a;
+      border-radius: calc(var(--radius-md) - 2px);
+      min-height: calc(540px - 1.3rem);
+    }
+
+    .resume-fallback {
+      padding: 1.1rem;
+      color: var(--muted);
+    }
+
+    .contact-grid {
+      grid-template-columns: 0.82fr 1.18fr;
+    }
+
+    .contact-list {
+      list-style: none;
+      display: grid;
+      gap: 0.45rem;
+      margin-top: 0.6rem;
+    }
+
+    .contact-list li {
+      display: grid;
+      gap: 0.12rem;
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    .contact-list span {
+      color: var(--text);
+      font-size: 0.83rem;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+    }
+
+    form {
+      display: grid;
+      gap: 0.66rem;
+    }
+
+    label {
+      display: grid;
+      gap: 0.32rem;
+      font-size: 0.88rem;
+      color: #b7c9e8;
+      font-weight: 700;
+    }
+
+    input,
+    textarea {
+      font: inherit;
+      color: var(--text);
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid #2a3f63;
+      border-radius: var(--radius-sm);
+      padding: 0.62rem 0.72rem;
+    }
+
+    textarea {
+      min-height: 120px;
+      resize: vertical;
+    }
+
+    input:focus,
+    textarea:focus {
+      outline: 2px solid rgba(57, 210, 190, 0.3);
+      border-color: rgba(57, 210, 190, 0.45);
+      outline-offset: 1px;
+    }
+
+    .note {
+      color: var(--muted);
+      font-size: 0.82rem;
+      margin-top: -0.08rem;
+    }
+
+    .note.ok {
+      color: #a4ebc8;
+    }
+
+    .note.err {
+      color: #ffb7a2;
+    }
+
+    footer {
+      margin-top: 2.8rem;
+      border-top: 1px solid rgba(57, 210, 190, 0.16);
+      padding: 1.2rem 0;
+      background: rgba(2, 6, 12, 0.56);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+    }
+
+    .footer-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+      color: var(--muted);
+      font-size: 0.89rem;
+    }
+
+    .socials {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.42rem;
+    }
+
+    .icon-link {
+      width: 34px;
+      height: 34px;
+      border-radius: 999px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid #2a416a;
+      background: rgba(255, 255, 255, 0.02);
+      color: #d5e4ff;
+      transition: 0.2s ease;
+    }
+
+    .icon-link:hover {
+      border-color: #3f629a;
+      background: rgba(57, 210, 190, 0.09);
+      color: #e8f5ff;
+    }
+
+    .icon-link svg {
+      width: 16px;
+      height: 16px;
+      fill: currentColor;
+    }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(12px);
+      animation: reveal 0.68s ease forwards;
+    }
+
+    .d1 { animation-delay: 0.07s; }
+    .d2 { animation-delay: 0.14s; }
+    .d3 { animation-delay: 0.2s; }
+
+    @keyframes reveal {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes grid-slide {
+      0% { background-position: 0 0, 0 0; }
+      100% { background-position: 0 120px, 120px 0; }
+    }
+
+    @keyframes noise-float {
+      0% { transform: translate3d(0, 0, 0); }
+      100% { transform: translate3d(120px, -80px, 0); }
+    }
+
+    @media (max-width: 1100px) {
+      .hero-grid,
+      .focus-grid,
+      .work-grid,
+      .resume-layout,
+      .contact-grid,
+      .metric-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .resume-preview-card {
+        min-height: 420px;
+        padding: 0.55rem;
+      }
+
+      .resume-preview-card .resume-frame,
+      .resume-preview-card .resume-frame-wrap {
+        min-height: calc(420px - 1.1rem);
+        height: calc(420px - 1.1rem);
+      }
+    }
+
+    @media (max-width: 860px) {
+      .menu-btn {
+        display: inline-flex;
+      }
+
+      nav {
+        display: none;
+        width: 100%;
+        padding-bottom: 0.8rem;
+      }
+
+      nav.open {
+        display: block;
+      }
+
+      nav ul {
+        align-items: stretch;
+      }
+
+      nav li,
+      nav a {
+        width: 100%;
+      }
+
+      .topbar {
+        flex-wrap: wrap;
+        align-content: center;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html {
+        scroll-behavior: auto;
+      }
+
+      *,
+      *::before,
+      *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+      }
+
+      .fx-grid,
+      .fx-noise {
+        animation: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <a class="skip-link" href="#main-content">Skip to content</a>
+
+  <div class="fx-bg" aria-hidden="true">
+    <canvas id="liquid-bg-canvas" class="fx-canvas"></canvas>
+    <span class="fx-grid"></span>
+    <span class="fx-noise"></span>
+    <span class="fx-vignette"></span>
+  </div>
+
+  <header>
+    <div class="container topbar">
+      <a class="brand" href="#home" aria-label="Saurabh Advani home">
+        <span class="brand-dot" aria-hidden="true"></span>
+        <span>Saurabh Advani</span>
+      </a>
+
+      <button class="menu-btn" id="menu-btn" aria-expanded="false" aria-controls="main-nav">Menu</button>
+
+      <nav id="main-nav" aria-label="Primary navigation">
+        <ul>
+          <li><a class="nav-track" href="#home">Home</a></li>
+          <li><a class="nav-track" href="#focus">Focus</a></li>
+          <li><a class="nav-track" href="#work">Work</a></li>
+          <li><a class="nav-track" href="#resume">Resume</a></li>
+          <li><a class="nav-track" href="#contact">Contact</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main-content">
+    <section id="home" class="hero">
+      <div class="container hero-grid">
+        <article class="card hero-main reveal">
+          <span class="tag">DevSecOps Engineer</span>
+          <h1>Secure delivery. Reliable platforms. Faster engineering velocity.</h1>
+          <p>
+            I build production-grade DevSecOps systems: hardened cloud infrastructure,
+            automated delivery pipelines, and high-signal observability.
+          </p>
+
+          <div class="hero-cta">
+            <a class="btn btn-main" href="#contact">Hire Me</a>
+            <a class="btn btn-ghost" href="#resume">View Resume</a>
+          </div>
+
+        </article>
+
+        <aside class="hero-side">
+          <section class="card panel reveal d1" aria-label="Profile photo">
+            <div class="photo-ring">
+              <img id="profile-photo" src="pf.jpeg" alt="Saurabh Advani portrait">
+              <span id="photo-placeholder" class="photo-placeholder">Add Your Photo Here</span>
+            </div>
+          </section>
+
+          <section class="card panel reveal d2" aria-label="Data tunnel animation">
+            <div class="video-box">
+              <div class="tunnel-stage" id="data-tunnel-stage" aria-hidden="true"></div>
+              <p class="photo-sub">Automation, secure, and fast transformation through resilient data pipelines.</p>
+            </div>
+          </section>
+        </aside>
+      </div>
+    </section>
+
+    <section class="metrics">
+      <div class="container metric-grid reveal d1">
+        <article class="metric"><strong>99.95%</strong><span>Service uptime</span></article>
+        <article class="metric"><strong>65%</strong><span>Faster deploy cycles</span></article>
+        <article class="metric"><strong>42%</strong><span>Lower MTTR</span></article>
+        <article class="metric"><strong>30%</strong><span>Cloud cost reduced</span></article>
+      </div>
+    </section>
+
+    <section id="focus" class="focus">
+      <div class="container">
+        <div class="section-head reveal d1">
+          <h2>Core Focus</h2>
+          <p>Pragmatic DevSecOps execution from architecture to production operations.</p>
+        </div>
+
+        <div class="focus-grid">
+          <article class="card focus-card reveal d1">
+            <span class="kpi cool">Platform</span>
+            <h3>Cloud Architecture</h3>
+            <p>AWS and Azure environments designed for scale, security, and operational clarity.</p>
+          </article>
+
+          <article class="card focus-card reveal d2">
+            <span class="kpi ok">Security</span>
+            <h3>Shift-Left DevSecOps</h3>
+            <p>Pipeline security controls and policy gates that reduce risk before release.</p>
+          </article>
+
+          <article class="card focus-card reveal d3">
+            <span class="kpi.warn">Reliability</span>
+            <h3>Observability + SRE</h3>
+            <p>Actionable telemetry, smart alerting, and faster incident response patterns.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="work" class="work">
+      <div class="container">
+        <div class="section-head reveal d1">
+          <h2>Featured Work</h2>
+          <p>Delivery-focused initiatives with measurable engineering impact.</p>
+        </div>
+
+        <div class="work-grid">
+          <article class="card work-card reveal d1">
+            <span class="kpi ok">Delivery speed +58%</span>
+            <h3>Multi-Region Kubernetes Rollout</h3>
+            <video autoplay="" loop="" muted="" playsinline="" class="mx-auto mb-4" height="170" poster="static/landing-page/3d-control-fallback.jpg" src="static/landing-page/3d-control.mp4" width="170"></video>
+            <p>Resilient clusters with safer deployment controls and zero-downtime releases.</p>
+          </article>
+
+          <article class="card work-card reveal d2">
+            <span class="kpi.warn">Cloud spend -30%</span>
+            <h3>FinOps Optimization Track</h3>
+            <video autoplay="" loop="" muted="" playsinline="" class="mx-auto mb-4" height="170" poster="static/landing-page/3d-control-fallback.jpg" src="static/landing-page/3d-broadcast.mp4" width="170"></video>
+            <p>Rightsizing, autoscaling, and capacity strategy to eliminate infrastructure waste.</p>
+          </article>
+
+          <article class="card work-card reveal d3">
+            <span class="kpi.cool">MTTR -42%</span>
+            <h3>Incident Command Center</h3>
+            <video autoplay="" loop="" muted="" playsinline="" class="mx-auto mb-4" height="170" poster="static/landing-page/3d-control-fallback.jpg" src="static/landing-page/3d-react.mp4" width="170"></video>
+            <p>Unified telemetry workflow to improve signal quality and response speed.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="stack" class="stack">
+      <div class="container">
+        <div id="tech-stack-root" class="reveal d1"></div>
+      </div>
+    </section>
+
+    <section id="resume" class="resume">
+      <div class="container">
+        <div class="section-head reveal d1">
+          <h2>Resume</h2>
+        </div>
+
+        <div class="resume-layout">
+          <article class="card resume-card reveal d2">
+            <div id="resume-timeline-root"></div>
+          </article>
+
+          <article class="card resume-card resume-preview-card reveal d3">
+            <div class="resume-frame-wrap">
+              <object class="resume-frame" data="Saurabh_Advani_Dev.pdf#page=1&view=FitH&zoom=page-fit&pagemode=none" type="application/pdf">
+                <div class="resume-fallback">
+                  Resume preview unavailable. Make sure <strong>Saurabh_Advani_Dev.pdf</strong> is present in this folder.
+                </div>
+              </object>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="contact" class="contact">
+      <div class="container">
+        <div class="section-head reveal d1">
+          <h2>Contact</h2>
+          <p>Open to DevSecOps, platform engineering, and cloud reliability opportunities.</p>
+        </div>
+
+        <div class="contact-grid">
+          <article class="card contact-card reveal d2">
+            <h3>Direct</h3>
+            <ul class="contact-list">
+              <li><span>Email</span><a href="mailto:contact@saurabhadvani.online">contact@saurabhadvani.online</a></li>
+              <li><span>Phone</span><a href="tel:+918238694661">+91 8238694661</a></li>
+              <li><span>Availability</span>Remote-first, Vadodara, India (IST)</li>
+            </ul>
+          </article>
+
+          <article class="card contact-card reveal d3">
+            <h3>Quick Message</h3>
+            <form id="contact-form">
+              <label>
+                Name
+                <input type="text" name="name" autocomplete="name" required>
+              </label>
+
+              <label>
+                Email
+                <input type="email" name="email" autocomplete="email" required>
+              </label>
+
+              <label>
+                Message
+                <textarea name="message" required></textarea>
+              </label>
+
+              <button class="btn btn-main" type="submit">Send Inquiry</button>
+              <p class="note" id="contact-status" role="status" aria-live="polite">
+                Messages are sent securely to contact@saurabhadvani.online.
+              </p>
+            </form>
+          </article>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container footer-row">
+      <p>&copy; <span id="year"></span> Saurabh Advani - DevSecOps Engineer</p>
+
+      <div class="socials" aria-label="Social links">
+        <a class="icon-link" href="https://linkedin.com/in/saurabh-advani-76b924216/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4.98 3.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5Zm-2 7h4v10h-4v-10Zm7 0h3.83v1.37h.05c.53-1 1.83-2.05 3.77-2.05 4.04 0 4.79 2.66 4.79 6.11v4.57h-4v-4.05c0-1-.02-2.28-1.39-2.28-1.39 0-1.6 1.09-1.6 2.21v4.12h-4v-10Z"/></svg>
+        </a>
+        <a class="icon-link" href="https://github.com/saurabhr120" target="_blank" rel="noopener noreferrer" aria-label="GitHub">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 .5a12 12 0 0 0-3.8 23.4c.6.1.82-.26.82-.58v-2.1c-3.34.73-4.04-1.61-4.04-1.61-.55-1.4-1.34-1.77-1.34-1.77-1.1-.74.08-.73.08-.73 1.21.09 1.85 1.24 1.85 1.24 1.08 1.85 2.83 1.31 3.52 1 .11-.78.42-1.31.76-1.61-2.67-.3-5.48-1.33-5.48-5.93 0-1.31.47-2.38 1.24-3.22-.12-.3-.54-1.52.12-3.17 0 0 1.01-.32 3.3 1.23a11.5 11.5 0 0 1 6 0c2.29-1.55 3.3-1.23 3.3-1.23.66 1.65.24 2.87.12 3.17.77.84 1.24 1.9 1.24 3.22 0 4.61-2.81 5.62-5.49 5.92.43.37.81 1.1.81 2.21v3.28c0 .32.22.69.83.58A12 12 0 0 0 12 .5Z"/></svg>
+        </a>
+        <a class="icon-link" href="mailto:contact@saurabhadvani.online" aria-label="Email">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 5.5A2.5 2.5 0 0 1 5.5 3h13A2.5 2.5 0 0 1 21 5.5v13a2.5 2.5 0 0 1-2.5 2.5h-13A2.5 2.5 0 0 1 3 18.5v-13Zm2.2.5L12 11.1 18.8 6H5.2Zm13.3 1.2-6.1 4.57a.75.75 0 0 1-.9 0L5.5 7.2v11.3c0 .28.22.5.5.5h12a.5.5 0 0 0 .5-.5V7.2Z"/></svg>
+        </a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="https://unpkg.com/three@0.160.0/build/three.min.js"></script>
+  <script>
+    if (!window.THREE) {
+      document.write('<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r160/three.min.js"><\\/script>');
+    }
+  </script>
+  <script src="static/liquid-gradient-bg.js"></script>
+  <script src="static/data-tunnel-box.js"></script>
+  <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+  <script>
+    (function () {
+      if (!window.React || !window.ReactDOM) return;
+      var techRootEl = document.getElementById("tech-stack-root");
+      var timelineRootEl = document.getElementById("resume-timeline-root");
+      var e = React.createElement;
+
+      var techItems = [
+        { name: "AWS", logo: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/amazonwebservices/amazonwebservices-original-wordmark.svg" },
+        { name: "Azure", logo: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/azure/azure-original.svg" },
+        { name: "Linux", logo: "https://cdn.simpleicons.org/linux/FCC624" },
+        { name: "Docker", logo: "https://cdn.simpleicons.org/docker/2496ED" },
+        { name: "Kubernetes", logo: "https://cdn.simpleicons.org/kubernetes/326CE5" },
+        { name: "Terraform", logo: "https://cdn.simpleicons.org/terraform/844FBA" },
+        { name: "Ansible", logo: "https://cdn.simpleicons.org/ansible/EE0000" },
+        { name: "GitHub Actions", logo: "https://cdn.simpleicons.org/githubactions/2088FF" },
+        { name: "Jenkins", logo: "https://cdn.simpleicons.org/jenkins/D24939" },
+        { name: "Prometheus", logo: "https://cdn.simpleicons.org/prometheus/E6522C" },
+        { name: "Grafana", logo: "https://cdn.simpleicons.org/grafana/F46800" },
+        { name: "Vault", logo: "https://cdn.simpleicons.org/vault/FFEC6E" }
+      ];
+
+      function chunk(items, size) {
+        var groups = [];
+        for (var i = 0; i < items.length; i += size) {
+          groups.push(items.slice(i, i + size));
+        }
+        return groups;
+      }
+
+      var slides = chunk(techItems, 6);
+      var loopSlides = slides.concat(slides);
+
+      function TechStackSection() {
+        return e("div", { className: "mx-auto max-w-6xl" }, [
+          e("div", { key: "head", className: "mb-10 text-center" }, [
+            e("h2", {
+              className: "text-3xl font-semibold tracking-tight text-slate-100 md:text-4xl"
+            }, "Technology Stack"),
+            e("p", {
+              className: "mx-auto mt-3 max-w-3xl text-sm text-slate-300 md:text-base"
+            }, "Tools used to build and operate secure, scalable production systems.")
+          ]),
+          e("div", {
+            key: "carousel",
+            className: "stack-marquee relative rounded-2xl border border-slate-800 bg-slate-950/70 p-4 shadow-[0_14px_36px_rgba(0,0,0,0.35)] sm:p-6"
+          }, [
+            e("div", { key: "track", className: "stack-marquee-track", "aria-live": "off" },
+              loopSlides.map(function (slide, slideIndex) {
+                return e("div", {
+                  key: "slide-" + String(slideIndex),
+                  className: "stack-slide"
+                }, [
+                  e("div", {
+                    key: "grid-" + String(slideIndex),
+                    className: "stack-tech-grid"
+                  }, slide.map(function (item) {
+                    return e("article", {
+                      key: slideIndex + "-" + item.name,
+                      className: "stack-tech-card group flex flex-col items-center justify-center rounded-xl border border-slate-800 bg-slate-900 px-3 py-4 text-center transition-all duration-300 hover:scale-105 hover:shadow-[0_10px_22px_rgba(15,23,42,0.45)]"
+                    }, [
+                      e("div", {
+                        key: "logo-wrap",
+                        className: "stack-logo-wrap flex h-12 w-12 items-center justify-center rounded-full border border-slate-700 bg-slate-800"
+                      }, [
+                        e("img", {
+                          key: "logo",
+                          src: item.logo,
+                          alt: item.name + " logo",
+                          loading: "lazy",
+                          decoding: "async",
+                          className: "h-7 w-7 object-contain drop-shadow-[0_0_4px_rgba(0,0,0,0.45)]"
+                        })
+                      ]),
+                      e("span", {
+                        key: "name",
+                        className: "mt-3 text-sm font-medium text-slate-200"
+                      }, item.name)
+                    ]);
+                  }))
+                ]);
+              })
+            )
+          ])
+        ]);
+      }
+
+      if (techRootEl) {
+        ReactDOM.createRoot(techRootEl).render(e(TechStackSection));
+      }
+
+      var timelineItems = [
+        {
+          title: "Client Service Associate",
+          company: "Numerator",
+          duration: "Oct 2025 - Present",
+          mode: "Hybrid",
+          description: "Own client analytics delivery with SLA focus and secure data workflows."
+        },
+        {
+          title: "Web-Dev Intern",
+          company: "Vardaam Technologies Pvt. Ltd.",
+          duration: "June 2024 - Dec 2024",
+          mode: "On-site",
+          description: "Shipped production web modules and improved delivery quality on-site."
+        },
+        {
+          title: "BTech in Computer Science",
+          company: "MIT-WPU",
+          duration: "2021 - 2025",
+          mode: "On-site",
+          description: "Built strong foundations in systems, cloud engineering, and security."
+        }
+      ];
+
+      function ResumeTimeline() {
+        return e("div", { className: "mx-auto w-full max-w-3xl" }, [
+          e("div", { key: "head", className: "mb-6" }, [
+            e("h3", {
+              className: "text-xl font-semibold tracking-tight text-slate-100"
+            }, "Professional Timeline"),
+            e("p", {
+              className: "mt-2 text-sm text-slate-300"
+            }, "Career and education milestones aligned with platform engineering goals.")
+          ]),
+          e("div", { key: "timeline", className: "relative mx-auto w-full py-1" }, [
+            e("span", {
+              key: "line",
+              "aria-hidden": "true",
+              className: "pointer-events-none absolute left-4 top-0 bottom-0 z-0 w-[2px] bg-gradient-to-b from-teal-200/22 via-teal-200/16 to-teal-200/8 md:left-1/2 md:-translate-x-1/2"
+            }),
+            e("ol", { key: "items", className: "relative z-10 space-y-4" },
+              timelineItems.map(function (item, index) {
+                var isLeft = index % 2 === 0;
+                var contentPositionClass = isLeft
+                  ? "md:col-start-1 md:justify-self-end md:text-right"
+                  : "md:col-start-4 md:justify-self-start md:text-left";
+                var metaAlignClass = isLeft
+                  ? "mt-2 flex flex-wrap items-center gap-2 text-[11px] text-slate-500 md:justify-end"
+                  : "mt-2 flex flex-wrap items-center gap-2 text-[11px] text-slate-500";
+
+                return e("li", {
+                  key: item.title + "-" + item.company,
+                  className: "relative grid grid-cols-[2rem,1fr] items-start gap-x-3 md:grid-cols-[1fr,8.5rem,2.5rem,1fr] md:gap-x-5"
+                }, [
+                  e("span", {
+                    key: "date-marker",
+                    className: "col-start-2 mb-1 mt-1 text-[10px] font-medium uppercase tracking-wide text-slate-400 md:col-start-2 md:justify-self-end md:pr-1 md:text-right"
+                  }, item.duration),
+                  e("span", {
+                    key: "dot",
+                    "aria-hidden": "true",
+                    className: "relative z-20 mt-1 flex h-8 w-8 items-center justify-center md:col-start-3 md:justify-self-center"
+                  }, [
+                    e("span", {
+                      key: "dot-ring",
+                      className: "absolute h-[18px] w-[18px] rounded-full border border-teal-200/55 shadow-[0_0_8px_rgba(57,210,190,0.24)] animate-pulse [animation-duration:3.2s]"
+                    }),
+                    e("span", {
+                      key: "dot-core",
+                      className: "absolute h-[8px] w-[8px] rounded-full bg-teal-200"
+                    })
+                  ]),
+                  e("article", {
+                    key: "content",
+                    className: "group relative col-start-2 rounded-lg border border-slate-700/60 bg-slate-900/38 px-4 py-3 backdrop-blur-sm transition-all duration-300 hover:-translate-y-1 hover:border-teal-200/28 hover:shadow-[0_10px_22px_rgba(6,12,24,0.3)] md:col-start-auto md:w-full md:max-w-md " + contentPositionClass
+                  }, [
+                    e("h4", {
+                      key: "title",
+                      className: "text-lg font-extrabold tracking-tight text-slate-100"
+                    }, item.title),
+                    e("p", {
+                      key: "company",
+                      className: "mt-0.5 text-xs text-slate-400"
+                    }, item.company),
+                    e("div", {
+                      key: "meta",
+                      className: metaAlignClass
+                    }, [
+                      e("span", {
+                        key: "mode",
+                        className: "inline-flex items-center rounded-full border border-slate-500/45 bg-slate-800/45 px-2 py-0.5 text-[10px] font-medium text-slate-300"
+                      }, item.mode)
+                    ]),
+                    e("p", {
+                      key: "desc",
+                      className: "mt-1.5 truncate text-sm text-slate-300"
+                    }, item.description)
+                  ])
+                ]);
+              })
+            )
+          ])
+        ]);
+      }
+
+      if (timelineRootEl) {
+        ReactDOM.createRoot(timelineRootEl).render(e(ResumeTimeline));
+      }
+    })();
+  </script>
+
+  <script>
+    (function () {
+      var menuBtn = document.getElementById("menu-btn");
+      var nav = document.getElementById("main-nav");
+
+      if (menuBtn && nav) {
+        menuBtn.addEventListener("click", function () {
+          var expanded = menuBtn.getAttribute("aria-expanded") === "true";
+          menuBtn.setAttribute("aria-expanded", String(!expanded));
+          nav.classList.toggle("open");
+        });
+      }
+
+      var navLinks = Array.from(document.querySelectorAll("a.nav-track"));
+      var sections = navLinks
+        .map(function (link) {
+          var id = link.getAttribute("href");
+          return id ? document.querySelector(id) : null;
+        })
+        .filter(Boolean);
+
+      var observer = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+          if (!entry.isIntersecting) return;
+          navLinks.forEach(function (link) {
+            link.classList.toggle("active", link.getAttribute("href") === "#" + entry.target.id);
+          });
+        });
+      }, { threshold: 0.52 });
+
+      sections.forEach(function (section) {
+        observer.observe(section);
+      });
+
+      navLinks.forEach(function (link) {
+        link.addEventListener("click", function () {
+          if (!nav || !menuBtn) return;
+          nav.classList.remove("open");
+          menuBtn.setAttribute("aria-expanded", "false");
+        });
+      });
+
+      var form = document.getElementById("contact-form");
+      if (form) {
+        var submitBtn = form.querySelector("button[type='submit']");
+        var contactStatus = document.getElementById("contact-status");
+
+        form.addEventListener("submit", function (event) {
+          event.preventDefault();
+          var data = new FormData(form);
+          var name = String(data.get("name") || "").trim();
+          var email = String(data.get("email") || "").trim();
+          var message = String(data.get("message") || "").trim();
+
+          if (!name || !email || !message) {
+            if (contactStatus) {
+              contactStatus.textContent = "Please complete all fields.";
+              contactStatus.classList.remove("ok");
+              contactStatus.classList.add("err");
+            }
+            return;
+          }
+
+          if (submitBtn) {
+            submitBtn.disabled = true;
+            submitBtn.textContent = "Sending...";
+          }
+          if (contactStatus) {
+            contactStatus.textContent = "Sending your message...";
+            contactStatus.classList.remove("ok", "err");
+          }
+
+          fetch("/api/contact", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              name: name,
+              email: email,
+              message: message
+            })
+          })
+            .then(function (response) {
+              return response.json().catch(function () { return {}; }).then(function (payload) {
+                if (!response.ok) {
+                  var err = payload && payload.message ? payload.message : "Unable to send message right now.";
+                  throw new Error(err);
+                }
+                return payload;
+              });
+            })
+            .then(function () {
+              if (contactStatus) {
+                contactStatus.textContent = "Message sent successfully.";
+                contactStatus.classList.remove("err");
+                contactStatus.classList.add("ok");
+              }
+              form.reset();
+            })
+            .catch(function (error) {
+              if (contactStatus) {
+                contactStatus.textContent = error && error.message ? error.message : "Unable to send message right now.";
+                contactStatus.classList.remove("ok");
+                contactStatus.classList.add("err");
+              }
+            })
+            .finally(function () {
+              if (submitBtn) {
+                submitBtn.disabled = false;
+                submitBtn.textContent = "Send Inquiry";
+              }
+            });
+        });
+      }
+
+      var year = document.getElementById("year");
+      if (year) {
+        year.textContent = String(new Date().getFullYear());
+      }
+
+      var profilePhoto = document.getElementById("profile-photo");
+      var placeholder = document.getElementById("photo-placeholder");
+      if (profilePhoto) {
+        function showPlaceholder() {
+          profilePhoto.style.display = "none";
+          if (placeholder) {
+            placeholder.style.display = "block";
+          }
+        }
+
+        function showPhoto() {
+          if (placeholder) {
+            placeholder.style.display = "none";
+          }
+          profilePhoto.style.display = "block";
+        }
+
+        profilePhoto.addEventListener("error", showPlaceholder);
+        profilePhoto.addEventListener("load", showPhoto);
+
+        // Handle cached images where "load" may fire before listeners are attached.
+        if (profilePhoto.complete) {
+          if (profilePhoto.naturalWidth > 0) {
+            showPhoto();
+          } else {
+            showPlaceholder();
+          }
+        }
+      }
+
+      var resumeView = document.getElementById("resume-view");
+      var resumeDownload = document.getElementById("resume-download");
+      var resumeStatus = document.getElementById("resume-status");
+
+      if (resumeView || resumeDownload || resumeStatus) {
+        fetch("Saurabh_Advani_Dev.pdf", { method: "HEAD" })
+          .then(function (response) {
+            if (!response.ok) {
+              throw new Error("missing");
+            }
+            if (resumeStatus) {
+              resumeStatus.textContent = "Resume is available for online view and download.";
+            }
+          })
+          .catch(function () {
+            if (resumeStatus) {
+              resumeStatus.textContent = "Resume file not found. Add Saurabh_Advani_Dev.pdf to enable view and download.";
+            }
+            if (resumeView) {
+              resumeView.setAttribute("aria-disabled", "true");
+              resumeView.classList.add("btn-ghost");
+              resumeView.removeAttribute("href");
+              resumeView.removeAttribute("target");
+            }
+            if (resumeDownload) {
+              resumeDownload.setAttribute("aria-disabled", "true");
+              resumeDownload.removeAttribute("href");
+            }
+          });
+      }
+    })();
+  </script>
+</body>
+</html>
