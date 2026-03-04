@@ -7,9 +7,9 @@ pipeline {
 
     stages {
 
-        stage('DEBUG') {
+        stage('Checkout Code') {
             steps {
-                echo "NEW JENKINSFILE LOADED"
+                checkout scm
             }
         }
 
@@ -45,60 +45,48 @@ pipeline {
 
         stage('Deploy to Fly.io') {
             steps {
-                withCredentials([string(credentialsId: 'Fly-token', variable: 'FLY_API_TOKEN')]) {
+                withCredentials([string(credentialsId: 'fly-token', variable: 'FLY_API_TOKEN')]) {
                     sh '''
                     echo "Deploying to Fly.io"
-                    flyctl deploy --remote-only
+                    flyctl deploy --remote-only -a webv
                     '''
                 }
             }
         }
-
     }
 
     post {
 
         success {
-            echo "Pipeline successful 🚀"
-
-            emailext (
-                subject: "SUCCESS: Jenkins Build ${env.JOB_NAME} #${env.BUILD_NUMBER}",
+            emailext(
+                subject: "SUCCESS: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
                 body: """
-                Good news!
+Build Successful 🚀
 
-                The Jenkins pipeline completed successfully.
+Project: ${env.JOB_NAME}
+Build Number: ${env.BUILD_NUMBER}
 
-                Job: ${env.JOB_NAME}
-                Build Number: ${env.BUILD_NUMBER}
-
-                View Build:
-                ${env.BUILD_URL}
-
-                """,
+Check Deployment:
+${env.BUILD_URL}
+""",
                 to: "contact@saurabhadvani.online"
             )
         }
 
         failure {
-            echo "Pipeline failed ❌"
-
-            emailext (
-                subject: "FAILED: Jenkins Build ${env.JOB_NAME} #${env.BUILD_NUMBER}",
+            emailext(
+                subject: "FAILED: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
                 body: """
-                Attention!
+Build Failed ❌
 
-                The Jenkins pipeline has FAILED.
+Project: ${env.JOB_NAME}
+Build Number: ${env.BUILD_NUMBER}
 
-                Job: ${env.JOB_NAME}
-                Build Number: ${env.BUILD_NUMBER}
-
-                Check logs:
-                ${env.BUILD_URL}
-
-                """,
+Check Logs:
+${env.BUILD_URL}
+""",
                 to: "contact@saurabhadvani.online"
             )
         }
-
     }
 }
