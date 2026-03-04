@@ -1,12 +1,16 @@
 pipeline {
     agent any
 
+    environment {
+        FLY_API_TOKEN = credentials('fly-token')
+    }
+
     stages {
 
         stage('Clone Repository') {
             steps {
                 git branch: 'cicd-pipeline',
-                url: 'https://github.com/saurabhr120/my-portflio.git'
+                url: 'git@github.com:saurabhr120/my-portflio.git'
             }
         }
 
@@ -14,8 +18,11 @@ pipeline {
             steps {
                 sh '''
                 echo "Building portfolio"
+
+                rm -rf build
                 mkdir build
-                cp -r * build/
+
+                rsync -av --exclude build . build
                 '''
             }
         }
@@ -23,15 +30,31 @@ pipeline {
         stage('Test') {
             steps {
                 sh '''
-                echo "Checking files"
+                echo "Testing website structure"
                 ls -la build
                 '''
             }
         }
 
-        stage('Deploy') {
+        stage('SonarQube Scan') {
             steps {
-                echo "Deploying portfolio"
+                withSonarQubeEnv('sonarserver') {
+                    sh '''
+                    sonar-scanner \
+                    -Dsonar.projectKey=portfolio \
+                    -Dsonar.sources=. \
+                    -Dsonar.host.url=$SONAR_HOST_URL \
+                    -Dsonar.login=$SONAR_AUTH_TOKEN
+                    '''
+                }
+            }
+        }
+
+        stage('Deploy to Fly.io') {
+            steps {
+                sh '''
+                flyctl deploy --remote-only
+                '''
             }
         }
     }
@@ -43,7 +66,7 @@ pipeline {
         }
 
         failure {
-            echo "Deployment failed"
+            echo "Pipeline failed"
         }
     }
 }
