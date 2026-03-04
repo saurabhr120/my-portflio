@@ -4,13 +4,14 @@ pipeline {
     environment {
         SCANNER_HOME = tool 'sonar-scanner'
     }
-    stage('DEBUG') {
-    steps {
-        echo "NEW JENKINSFILE LOADED"
-    }
-}
 
     stages {
+
+        stage('DEBUG') {
+            steps {
+                echo "NEW JENKINSFILE LOADED"
+            }
+        }
 
         stage('Verify Files') {
             steps {
