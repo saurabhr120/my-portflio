@@ -2,71 +2,61 @@ pipeline {
     agent any
 
     environment {
-        FLY_API_TOKEN = credentials('fly-token')
+        SCANNER_HOME = tool 'sonar-scanner'
     }
 
     stages {
 
-        stage('Clone Repository') {
-            steps {
-                git branch: 'cicd-pipeline',
-                url: 'git@github.com:saurabhr120/my-portflio.git'
-            }
-        }
-
-        stage('Build Website') {
+        stage('Verify Files') {
             steps {
                 sh '''
-                echo "Building portfolio"
-
-                rm -rf build
-                mkdir build
-
-                rsync -av --exclude build . build
-                '''
-            }
-        }
-
-        stage('Test') {
-            steps {
-                sh '''
-                echo "Testing website structure"
-                ls -la build
+                echo "Checking repository"
+                ls -la
                 '''
             }
         }
 
         stage('SonarQube Scan') {
             steps {
-                withSonarQubeEnv('sonarserver') {
+                withSonarQubeEnv('sonar-server') {
                     sh '''
-                    sonar-scanner \
-                    -Dsonar.projectKey=portfolio \
+                    $SCANNER_HOME/bin/sonar-scanner \
+                    -Dsonar.projectKey=my-portfolio \
                     -Dsonar.sources=. \
-                    -Dsonar.host.url=$SONAR_HOST_URL \
-                    -Dsonar.login=$SONAR_AUTH_TOKEN
                     '''
                 }
             }
         }
 
-        stage('Deploy to Fly.io') {
+        stage('Build Docker Image') {
             steps {
                 sh '''
-                flyctl deploy --remote-only
+                echo "Building Docker Image"
+                docker build -t portfolio .
                 '''
             }
         }
+
+        stage('Deploy to Fly.io') {
+            steps {
+                withCredentials([string(credentialsId: 'fly-token', variable: 'FLY_API_TOKEN')]) {
+                    sh '''
+                    echo "Deploying to Fly.io"
+                    flyctl deploy --remote-only
+                    '''
+                }
+            }
+        }
+
     }
 
     post {
-
         success {
-            echo "Deployment successful"
+            echo "Pipeline successful 🚀"
         }
 
         failure {
-            echo "Pipeline failed"
+            echo "Pipeline failed ❌"
         }
     }
 }
