@@ -28,7 +28,7 @@ pipeline {
                     sh '''
                     $SCANNER_HOME/bin/sonar-scanner \
                     -Dsonar.projectKey=my-portfolio \
-                    -Dsonar.sources=. \
+                    -Dsonar.sources=.
                     '''
                 }
             }
@@ -45,7 +45,7 @@ pipeline {
 
         stage('Deploy to Fly.io') {
             steps {
-                withCredentials([string(credentialsId: 'Fly-token', variable: 'FLY_API_TOKEN')]) {
+                withCredentials([string(credentialsId: 'fly-token', variable: 'FLY_API_TOKEN')]) {
                     sh '''
                     echo "Deploying to Fly.io"
                     flyctl deploy --remote-only
@@ -57,12 +57,48 @@ pipeline {
     }
 
     post {
+
         success {
             echo "Pipeline successful 🚀"
+
+            emailext (
+                subject: "SUCCESS: Jenkins Build ${env.JOB_NAME} #${env.BUILD_NUMBER}",
+                body: """
+                Good news!
+
+                The Jenkins pipeline completed successfully.
+
+                Job: ${env.JOB_NAME}
+                Build Number: ${env.BUILD_NUMBER}
+
+                View Build:
+                ${env.BUILD_URL}
+
+                """,
+                to: "saurabhadvani.online"
+            )
         }
 
         failure {
             echo "Pipeline failed ❌"
+
+            emailext (
+                subject: "FAILED: Jenkins Build ${env.JOB_NAME} #${env.BUILD_NUMBER}",
+                body: """
+                Attention!
+
+                The Jenkins pipeline has FAILED.
+
+                Job: ${env.JOB_NAME}
+                Build Number: ${env.BUILD_NUMBER}
+
+                Check logs:
+                ${env.BUILD_URL}
+
+                """,
+                to: "saurabhadvani.online"
+            )
         }
+
     }
 }
