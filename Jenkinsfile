@@ -45,7 +45,7 @@ pipeline {
 
         stage('Deploy to Fly.io') {
             steps {
-                withCredentials([string(credentialsId: 'fly-token', variable: 'FLY_API_TOKEN')]) {
+                withCredentials([string(credentialsId: 'Fly-token', variable: 'FLY_API_TOKEN')]) {
                     sh '''
                     echo "Deploying to Fly.io"
                     flyctl deploy --remote-only -a webv
