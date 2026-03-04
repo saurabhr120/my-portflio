@@ -75,7 +75,7 @@ pipeline {
                 ${env.BUILD_URL}
 
                 """,
-                to: "saurabhadvani.online"
+                to: "contact@saurabhadvani.online"
             )
         }
 
@@ -96,7 +96,7 @@ pipeline {
                 ${env.BUILD_URL}
 
                 """,
-                to: "saurabhadvani.online"
+                to: "contact@saurabhadvani.online"
             )
         }
 
